@@ -2,15 +2,14 @@ require './lib/board'
 
 class Game
   attr_reader :play_again
+  attr_reader :board
+  attr_reader :winner, :draw
 
   def initialize
     @board = Board.new
-    start_game
   end
 
-  private
-
-  def start_game
+  def start
     loop do
       take_turn
       calculate_winner
@@ -19,11 +18,13 @@ class Game
     suggest_to_play_again
   end
 
+  private
+
   def take_turn
     @board.display
     puts 'Enter position from free spots: '
     position = gets
-    take_turn unless @board.free_squares.include? position.to_i
+    return unless valid_position? position.to_i
     @board.mark_space(position.to_i)
   end
 
@@ -32,6 +33,10 @@ class Game
       next unless winning_combination? combination
       return show_winner
     end
+  end
+
+  def valid_position?(position)
+    (1..9).cover?(position) && @board.free_squares.include?(position)
   end
 
   def display_draw_result

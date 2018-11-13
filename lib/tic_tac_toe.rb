@@ -1,8 +1,9 @@
 require './lib/game'
 
-def start_game
+def start_new_game
   game = Game.new
-  start_game if game.play_again
+  game.start
+  start_new_game if game.play_again
 end
 
-start_game
+start_new_game
